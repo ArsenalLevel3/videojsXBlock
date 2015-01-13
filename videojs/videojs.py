@@ -1,3 +1,4 @@
+#coding=utf-8
 """ videojsXBlock main Python class"""
 
 import pkg_resources
@@ -139,3 +140,8 @@ class videojsXBlock(XBlock):
         return {
             'result': 'success',
         }
+    @staticmethod
+    def workbench_scenarios():
+        return [
+              ("videojs demo", "<videojs />")  #<videojs /> 命名很重要  否则不显示
+        ]
