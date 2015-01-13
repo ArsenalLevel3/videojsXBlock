@@ -52,7 +52,14 @@ class videojsXBlock(XBlock):
         default="",
         scope=Scope.content,
         help="The start and end time of your video. Equivalent to 'video.mp4#t=startTime,endTime' in the url.")
-
+    #允许用户设置捕捉的时间点，逗号分隔，或是使用list ， 把数据类型和可见度分开
+    track_points = String(display_name="track point",
+        default = "1,2,3,4",
+        scope = Scope.content,
+        help="the track point for analysis"
+        )
+    #使用list来存储每个点的次数
+    #sample 可重用 最后的回调  先处理一个点 
     '''
     Util functions
     '''
@@ -85,13 +92,14 @@ class videojsXBlock(XBlock):
             fullUrl += "#t=" + self.start_time
         elif self.end_time != "":
             fullUrl += "#t=0," + self.end_time
-        
+        track_points = self.track_points.split(",") #["1","2","3"]
         context = {
             'display_name': self.display_name,
             'url': fullUrl,
             'allow_download': self.allow_download,
             'source_text': self.source_text,
-            'source_url': self.source_url
+            'source_url': self.source_url,
+            'track_points':track_points,
         }
         html = self.render_template('static/html/videojs_view.html', context)
         
@@ -100,11 +108,13 @@ class videojsXBlock(XBlock):
         frag.add_css(self.load_resource("static/css/videojs.css"))
         frag.add_javascript(self.load_resource("static/js/video-js.js"))
         frag.add_javascript(self.load_resource("static/js/videojs_view.js"))
+        #加载js文件 不用requirejs?
         frag.initialize_js('videojsXBlockInitView')
         return frag
 
     def studio_view(self, context=None):
         """
+        #在xblock-sdk里用不着，得到真实环境下
         The secondary view of the XBlock, shown to teachers
         when editing the XBlock.
         """
