@@ -7,12 +7,14 @@ function videojsXBlockInitView(runtime, element) {
     if(element.innerHTML) element = $(element);
     
     var video = element.find('video:first');
-    videojs(video.get(0), {playbackRates:[0.75,1,1.25,1.5,1.75,2]}, function() {});
+    myvideo = videojs(video.get(0), {playbackRates:[0.75,1,1.25,1.5,1.75,2]}, function() {});
     //my function
-    wwj_view()
+    wwj_view();
+    init_myvideo(myvideo);
 }
 
 function wwj_view(){
     //test js
     console.log("my view running")
+
 }

@@ -104,11 +104,18 @@ class videojsXBlock(XBlock):
         html = self.render_template('static/html/videojs_view.html', context)
         
         frag = Fragment(html)
+        #可以加http://链接吗,在这里来控制顺序？
+        frag.add_css_url("http://sampingchuang.com/static/lib/videojs-markers/videojs.markers.min.css")
+        #会被放最后，以至于js执行时不存在
+        frag.add_javascript_url("http://echarts.baidu.com/build/dist/echarts-all.js")
         frag.add_css(self.load_resource("static/css/video-js.min.css"))
         frag.add_css(self.load_resource("static/css/videojs.css"))
         frag.add_javascript(self.load_resource("static/js/video-js.js"))
         frag.add_javascript(self.load_resource("static/js/videojs_view.js"))
+        frag.add_javascript_url("http://sampingchuang.com/static/lib/videojs-markers/videojs-markers.js") #在video-js.js之后
         #加载js文件 不用requirejs?
+        frag.add_javascript(self.load_resource("static/js/wwj_echart.js"))
+        frag.add_javascript(self.load_resource("static/js/wwj_player.js"))
         frag.initialize_js('videojsXBlockInitView')
         return frag
 
