@@ -143,5 +143,5 @@ class videojsXBlock(XBlock):
     @staticmethod
     def workbench_scenarios():
         return [
-              ("videojs demo", "<videojs />")  #<videojs /> 命名很重要  否则不显示
+              ("videojs demo", "<videojs />")  #the name should be "<videojs />"
         ]
