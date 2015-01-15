@@ -24,7 +24,8 @@ class videojsXBlock(XBlock):
         help="This name appears in the horizontal navigation at the top of the page.")
 
     url = String(display_name="Video URL",
-        default="http://vjs.zencdn.net/v/oceans.mp4",
+        #default="http://vjs.zencdn.net/v/oceans.mp4",
+        default = "http://218.94.126.74:30001/mooc/xsyzc/2014/xsyzc1-0.mp4",
         scope=Scope.content,
         help="The URL for your video.")
     
@@ -58,6 +59,7 @@ class videojsXBlock(XBlock):
         scope = Scope.content,
         help="the track point for analysis"
         )
+    watched = Integer(help="How many times the student has watched it?", default=0, scope=Scope.user_state)
     #使用list来存储每个点的次数
     #sample 可重用 最后的回调  先处理一个点 
     '''
@@ -105,11 +107,11 @@ class videojsXBlock(XBlock):
         
         frag = Fragment(html)
         #可以加http://链接吗,在这里来控制顺序？
-        frag.add_css_url("http://sampingchuang.com/static/lib/videojs-markers/videojs.markers.min.css")
         #会被放最后，以至于js执行时不存在
         frag.add_javascript_url("http://echarts.baidu.com/build/dist/echarts-all.js")
         frag.add_css(self.load_resource("static/css/video-js.min.css"))
         frag.add_css(self.load_resource("static/css/videojs.css"))
+        frag.add_css_url("http://sampingchuang.com/static/lib/videojs-markers/videojs.markers.min.css")
         frag.add_javascript(self.load_resource("static/js/video-js.js"))
         frag.add_javascript(self.load_resource("static/js/videojs_view.js"))
         frag.add_javascript_url("http://sampingchuang.com/static/lib/videojs-markers/videojs-markers.js") #在video-js.js之后
@@ -157,6 +159,21 @@ class videojsXBlock(XBlock):
         return {
             'result': 'success',
         }
+
+    @XBlock.json_handler
+    def add_watched_times(self, data, suffix=''):
+        """
+        Called when student watched the time point .
+        called by js event
+        """
+        if not data.get('watched'):
+            log.warn('not watched yet')
+        else:
+            # 先处理观看一次的
+            self.watched += 1
+
+        return {'watched': self.watched}
+
     @staticmethod
     def workbench_scenarios():
         return [

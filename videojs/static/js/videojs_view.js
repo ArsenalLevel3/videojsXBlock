@@ -7,10 +7,18 @@ function videojsXBlockInitView(runtime, element) {
     if(element.innerHTML) element = $(element);
     
     var video = element.find('video:first');
+    //videojs(video.get(0), {playbackRates:[0.75,1,1.25,1.5,1.75,2]}, function() {});
     myvideo = videojs(video.get(0), {playbackRates:[0.75,1,1.25,1.5,1.75,2]}, function() {});
     //my function
     wwj_view();
-    init_myvideo(myvideo);
+    //the js file should load before
+    init_myvideo(myvideo,runtime, element);
+    //myvideo.addEvent('ready', function() {
+    //    myvideo.addEvent('finish', on_track_point);
+    //});
+
+   
+   //add the event on track point 
 }
 
 function wwj_view(){
