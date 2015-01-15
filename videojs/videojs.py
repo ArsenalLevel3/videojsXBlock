@@ -5,7 +5,7 @@ import pkg_resources
 from django.template import Context, Template
 
 from xblock.core import XBlock
-from xblock.fields import Scope, Integer, String, Boolean
+from xblock.fields import Scope, Integer, String, Boolean, List, Dict
 from xblock.fragment import Fragment
 
 class videojsXBlock(XBlock):
@@ -59,6 +59,19 @@ class videojsXBlock(XBlock):
         scope = Scope.content,
         help="the track point for analysis"
         )
+    #Dict,使用Dict，动态构造，从后端构建
+    list_track_points = List(
+            display_name="list track point",
+            help="list_track_points",
+            default = [1,2,3,4],
+            scope = Scope.content
+            )
+    dict_track_points = Dict(
+            display_name="dict track point",
+            help="dict_track_points",
+            default = {1:"a",2:"b",3:"c"},
+            scope = Scope.content
+            )
     watched = Integer(help="How many times the student has watched it?", default=0, scope=Scope.user_state)
     #使用list来存储每个点的次数
     #sample 可重用 最后的回调  先处理一个点 
@@ -102,6 +115,8 @@ class videojsXBlock(XBlock):
             'source_text': self.source_text,
             'source_url': self.source_url,
             'track_points':track_points,
+            'dict_track_points':self.dict_track_points,
+            'list_track_points':self.list_track_points,
         }
         html = self.render_template('static/html/videojs_view.html', context)
         
